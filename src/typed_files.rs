@@ -1,6 +1,6 @@
+use rand::{prelude::*, thread_rng};
 use std::fs::File;
-use std::io::{Seek, SeekFrom, Write, Result, Read};
-use rand::{thread_rng, prelude::*};
+use std::io::{Read, Result, Seek, SeekFrom, Write};
 
 const I32_SIZE: usize = 4;
 
@@ -14,7 +14,6 @@ pub trait IntegerFile {
     fn write_array(&mut self, values: Vec<i32>) -> Result<()>;
     fn fill_shuffled(&mut self, capacity: usize) -> Result<()>;
 }
-
 
 impl IntegerFile for File {
     fn read_int(&mut self) -> Result<i32> {
@@ -33,7 +32,8 @@ impl IntegerFile for File {
     }
 
     fn get_count(&self) -> Result<usize> {
-        self.metadata().and_then(|data| Ok((data.len() / I32_SIZE as u64) as usize))
+        self.metadata()
+            .and_then(|data| Ok((data.len() / I32_SIZE as u64) as usize))
     }
 
     fn read_as_array(&mut self) -> Result<Vec<i32>> {
