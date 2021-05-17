@@ -22,8 +22,7 @@ fn run_sorts() {
     let sorts = [
         Sort {
             name: "Сортировка пузырьком",
-            run: bubble_sort,
-        },
+            run: bubble_sort,        },
         Sort {
             name: "Сортировка простым выбором",
             run: selection_sort,
@@ -49,7 +48,7 @@ fn run_sorts() {
         }
         for file in files {
             match run_with_timer(sort.run, &file) {
-                Ok(time) => println!("Сортировка: \"{}\" Файл: \"{}\" Время: {} мс", sort.name, file, time.as_millis()),
+                Ok(time) => println!("Сортировка: \"{}\"\n\tФайл: \"{}\"\n\tВремя: {} мс\n", sort.name, file, time.as_millis()),
 
                 Err(e) => println!("Сортировка: \"{}\" Файл: \"{}\" Ошибка: \"{}\"", sort.name, file, e),
             };

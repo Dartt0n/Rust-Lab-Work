@@ -18,8 +18,7 @@ pub trait IntegerFile {
 impl IntegerFile for File {
     fn read_int(&mut self) -> Result<i32> {
         let mut buffer = [0u8; I32_SIZE];
-        self.read_exact(&mut buffer)
-            .and_then(|_| Ok(i32::from_le_bytes(buffer)))
+        self.read_exact(&mut buffer).and_then(|_| Ok(i32::from_le_bytes(buffer)))
     }
 
     fn write_int(&mut self, value: i32) -> Result<()> {
@@ -27,13 +26,11 @@ impl IntegerFile for File {
     }
 
     fn goto(&mut self, index: u32) -> Result<()> {
-        self.seek(SeekFrom::Start(index as u64 * I32_SIZE as u64))
-            .and_then(|_| Ok(()))
+        self.seek(SeekFrom::Start(index as u64 * I32_SIZE as u64)).and_then(|_| Ok(()))
     }
 
     fn get_count(&self) -> Result<usize> {
-        self.metadata()
-            .and_then(|data| Ok((data.len() / I32_SIZE as u64) as usize))
+        self.metadata().and_then(|data| Ok((data.len() / I32_SIZE as u64) as usize))
     }
 
     fn read_as_array(&mut self) -> Result<Vec<i32>> {

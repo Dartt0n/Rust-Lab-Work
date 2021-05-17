@@ -3,9 +3,10 @@ use std::fs::OpenOptions;
 use std::io::Result;
 
 pub fn selection_sort(target: &str) -> Result<()> {
-    let mut file = OpenOptions::new().read(true).write(true).open(target)?;
+    let mut file = OpenOptions::new().read(true).open(target)?;
     let mut array = file.read_as_array()?;
     let length = file.get_count()?;
+    drop(file);
 
     for i in 0..length - 1 {
         let mut min_index = i;
@@ -16,16 +17,16 @@ pub fn selection_sort(target: &str) -> Result<()> {
         }
         array.swap(min_index, i);
     }
-
+    let mut file = OpenOptions::new().truncate(true).write(true).open(target)?;
     file.write_array(array)?;
     Ok(())
 }
 
 pub fn bubble_sort(target: &str) -> Result<()> {
-    let mut file = OpenOptions::new().read(true).write(true).open(target)?;
+    let mut file = OpenOptions::new().read(true).open(target)?;
     let mut array = file.read_as_array()?;
     let length = file.get_count()?;
-
+    drop(file);
     for i in 0..length {
         for j in 0..length {
             if array[i] < array[j] {
@@ -33,16 +34,17 @@ pub fn bubble_sort(target: &str) -> Result<()> {
             }
         }
     }
-
+    let mut file = OpenOptions::new().truncate(true).write(true).open(target)?;
     file.write_array(array)?;
     Ok(())
 }
 
 pub fn limited_bubble_sort(target: &str) -> Result<()> {
-    let mut file = OpenOptions::new().read(true).write(true).open(target)?;
+    let mut file = OpenOptions::new().read(true).open(target)?;
     let mut i = 0;
     let length = file.get_count()?;
     let mut array = file.read_as_array()?;
+    drop(file);
     let mut flag = true;
     while flag {
         flag = false;
@@ -54,16 +56,16 @@ pub fn limited_bubble_sort(target: &str) -> Result<()> {
         }
         i += 1;
     }
-
+    let mut file = OpenOptions::new().truncate(true).write(true).open(target)?;
     file.write_array(array)?;
     Ok(())
 }
 
 pub fn shaker_sort(target: &str) -> Result<()> {
-    let mut file = OpenOptions::new().read(true).write(true).open(target)?;
+    let mut file = OpenOptions::new().read(true).open(target)?;
     let mut array = file.read_as_array()?;
     let length = file.get_count()?;
-
+    drop(file);
     loop {
         let mut swapped = false;
 
@@ -89,7 +91,7 @@ pub fn shaker_sort(target: &str) -> Result<()> {
             break;
         }
     }
-
+    let mut file = OpenOptions::new().truncate(true).write(true).open(target)?;
     file.write_array(array)?;
     Ok(())
 }
