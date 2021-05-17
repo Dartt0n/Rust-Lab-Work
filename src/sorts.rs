@@ -96,33 +96,31 @@ pub fn shaker_sort(target: &str) -> Result<()> {
     Ok(())
 }
 
-fn quick_sort_rec(mut array: &mut Vec<i32>, low: usize, high: usize) -> Result<()> {
-    let mut i = low as i32;
-    let mut j = high as i32;
-    let pivot = array[(i+j) as usize/2];
+fn partition(array: &mut Vec<i32>, low: i32, high: i32) -> i32 {
+    let pivot = array[high as usize];
+    let mut i = low-1;
 
-    while i <= j {
-        while array[i as usize] < pivot {
+    for j in low..high-1 {
+        if array[j as usize] <= pivot {
             i += 1;
-        }
-        while array[j as usize] > pivot {
-            j -= 1;
-        }
-
-        if i <= j {
-            array.swap(i as usize, j as usize);
-            i += 1;
-            j -= 1;
-        }
-        if j > low as i32 {
-            quick_sort_rec(&mut array, low, j as usize)?;
-        }
-        if i < high as i32 {
-            quick_sort_rec(&mut array, i as usize, high)?;
+            let t = array[j as usize];
+            array[j as usize] = array[i as usize];
+            array[i as usize] = t;
         }
     }
+    let t = array[(i+1) as usize];
+    array[(i+1) as usize] = array[high as usize];
+    array[high as usize] = t;
+    i + 1
+}
 
-    Ok(())
+fn quick_sort_rec(mut array: &mut Vec<i32>, low: i32, high: i32) {
+    if low < high {
+        let pi = partition(&mut array, low, high);
+
+        quick_sort_rec(&mut array, low, pi - 1);
+        quick_sort_rec(&mut array, pi + 1, high);
+    }
 }
 
 pub fn quick_sort(target: &str) -> Result<()> {
@@ -130,7 +128,7 @@ pub fn quick_sort(target: &str) -> Result<()> {
     let mut array = file.read_as_array()?;
     let length = file.get_count()?;
     drop(file);
-    quick_sort_rec(&mut array, 0, length-1)?;
+    quick_sort_rec(&mut array, 0, length as i32 - 1);
     let mut file = OpenOptions::new().truncate(true).write(true).open(target)?;
     file.write_array(array)?;
     Ok(())
