@@ -3,7 +3,7 @@ mod sorts;
 
 use std::fs::OpenOptions;
 use crate::typed_files::IntegerFile;
-use std::io::Result;
+use std::io::{Result, Write};
 use crate::sorts::{bubble_sort, selection_sort, limited_bubble_sort, shaker_sort};
 use std::time::{Duration, Instant};
 
@@ -19,9 +19,11 @@ struct Sort {
 }
 
 fn run_sorts() {
+    let mut statistics = OpenOptions::new().append(true).create(true).open("data.txt").unwrap();
+
     let sorts = [
-        //Sort {name: "Сортировка пузырьком", run: bubble_sort},
-        //Sort {name: "Сортировка простым выбором", run: selection_sort},
+        Sort {name: "Сортировка пузырьком", run: bubble_sort},
+        Sort {name: "Сортировка простым выбором", run: selection_sort},
         Sort {name: "Сортировка пузырьком с ограничением", run: limited_bubble_sort},
         Sort {name: "Сортировка перемешиванием", run: shaker_sort},
     ];
@@ -40,8 +42,8 @@ fn run_sorts() {
         }
         for file in files {
             match run_with_timer(sort.run, &file) {
-                Ok(time) => println!("{} файла {} длилась {} мс", sort.name, file, time.as_millis()),
-                Err(e) => println!("{} файла {} завершилась ошибкой {}", sort.name, file, e)
+                Ok(time) => statistics.write(format!("Сортировка: \"{}\" Файл: \"{}\" Время: {} мс", sort.name, file, time.as_millis()).as_bytes()),
+                Err(e) => statistics.write(format!("Сортировка: \"{}\" Файл: \"{}\" Ошибка: \"{}\"", sort.name, file, e).as_bytes())
             }
         }
     }
