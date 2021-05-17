@@ -8,7 +8,7 @@ pub trait IntegerFile {
     fn read_int(&mut self) -> Result<i32>;
     fn write_int(&mut self, value: i32) -> Result<()>;
     fn goto(&mut self, index: u32) -> Result<()>;
-    fn get_count(&self) -> Result<u32>;
+    fn get_count(&self) -> Result<usize>;
 
     fn read_as_array(&mut self) -> Result<Vec<i32>>;
     fn write_array(&mut self, values: Vec<i32>) -> Result<()>;
@@ -32,8 +32,8 @@ impl IntegerFile for File {
             .and_then(|_| Ok(()))
     }
 
-    fn get_count(&self) -> Result<u32> {
-        self.metadata().and_then(|data| Ok((data.len() / I32_SIZE as u64) as u32))
+    fn get_count(&self) -> Result<usize> {
+        self.metadata().and_then(|data| Ok((data.len() / I32_SIZE as u64) as usize))
     }
 
     fn read_as_array(&mut self) -> Result<Vec<i32>> {
