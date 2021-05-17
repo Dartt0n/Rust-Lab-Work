@@ -96,33 +96,33 @@ pub fn shaker_sort(target: &str) -> Result<()> {
     Ok(())
 }
 
-fn swap(array: &mut Vec<i32>, i: usize, j: usize ) {
-    let temp = array[i];
-    array[i] = array[j];
-    array[j] = temp;
-}
-
-fn partition(array: &mut Vec<i32>, start: usize, end: usize ) -> i32 {
-    let pivot = array[end];
-    let mut index = start;
-    let mut i = start;
-    while i < end {
-        if array[i] < pivot {
-            swap(array, i, index);
-            index+=1;
+fn partition(array: &mut Vec<i32>, first: usize, last: usize) -> usize {
+    let pivot = array[last];
+    let mut i = first;
+    let mut j = first;
+    while j < last - 1 {
+        if array[j] < pivot {
+            array.swap(i, j);
+            i += 1;
         }
-        i+=1;
+        j += 1;
     }
-    swap(array, index, end);
-    return index as i32;
+
+    if array[last] < array[i] {
+        array.swap(i, last);
+    }
+
+    i
 }
 fn quick_sort_rec(array: &mut Vec<i32>, start: usize, end: usize) {
     if start >= end {
         return;
     }
     let pivot = partition(array, start, end);
-    quick_sort_rec(array, start, (pivot - 1) as usize);
-    quick_sort_rec(array, (pivot + 1) as usize, end);
+    if pivot != 0 {
+        quick_sort_rec(array, start, pivot - 1);
+    }
+    quick_sort_rec(array, pivot + 1, end);
 }
 
 
@@ -136,4 +136,3 @@ pub fn quick_sort(target: &str) -> Result<()> {
     file.write_array(array)?;
     Ok(())
 }
-
