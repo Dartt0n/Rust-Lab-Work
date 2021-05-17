@@ -1,7 +1,7 @@
 mod sorts;
 mod typed_files;
 
-use crate::sorts::{bubble_sort, limited_bubble_sort, selection_sort, shaker_sort};
+use crate::sorts::{bubble_sort, limited_bubble_sort, selection_sort, shaker_sort, quick_sort};
 use crate::typed_files::IntegerFile;
 use std::fs::OpenOptions;
 use std::io::Result;
@@ -35,6 +35,10 @@ fn run_sorts() {
             name: "Сортировка перемешиванием",
             run: shaker_sort,
         },
+        Sort {
+            name: "Быстрая сортировка",
+            run: quick_sort,
+        }
     ];
     let sizes = [100, 500, 1_000, 5_000, 10_000, 50_000];
 

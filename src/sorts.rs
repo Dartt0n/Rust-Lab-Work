@@ -95,3 +95,44 @@ pub fn shaker_sort(target: &str) -> Result<()> {
     file.write_array(array)?;
     Ok(())
 }
+
+fn quick_sort_rec(mut array: &mut Vec<i32>, low: usize, high: usize) -> Result<()> {
+    let mut i = low as i32;
+    let mut j = high as i32;
+    let pivot = array[(i+j) as usize/2];
+
+    while i <= j {
+        while array[i as usize] < pivot {
+            i += 1;
+        }
+        while array[j as usize] > pivot {
+            j -= 1;
+        }
+
+        if i <= j {
+            array.swap(i as usize, j as usize);
+            i += 1;
+            j -= 1;
+        }
+        if j > low as i32 {
+            quick_sort_rec(&mut array, low, j as usize)?;
+        }
+        if i < high as i32 {
+            quick_sort_rec(&mut array, i as usize, high)?;
+        }
+    }
+
+    Ok(())
+}
+
+pub fn quick_sort(target: &str) -> Result<()> {
+    let mut file = OpenOptions::new().read(true).open(target)?;
+    let mut array = file.read_as_array()?;
+    let length = file.get_count()?;
+    drop(file);
+    quick_sort_rec(&mut array, 0, length-1)?;
+    let mut file = OpenOptions::new().truncate(true).write(true).open(target)?;
+    file.write_array(array)?;
+    Ok(())
+}
+
