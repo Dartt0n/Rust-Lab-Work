@@ -25,21 +25,20 @@ fn run_sorts() {
             file.fill_shuffled(*size).unwrap();
             files.push(name);
         }
-        for file in files {
-            match (sort.run)(&file) {
-                Ok(time) => println!("Сортировка: \"{}\"\n\tФайл: \"{}\"\n\tВремя: {} мкс\n", sort.name, file, time.as_micros()),
-                Err(e) => println!("Сортировка: \"{}\" Файл: \"{}\" Ошибка: \"{}\"", sort.name, file, e),
+        for size in &sizes {
+            match (sort.run)(&format!("data/d{}.dat", size)) {
+                Ok(time) => println!("{} | {} | {}", sort.name, size, time.as_micros()),
+                Err(e) => println!("{}", e),
             };
         }
     }
 }
 
 fn main() {
-    // let app = gtk::Application::new(Some("dartt0n.sorts_stats.app"), Default::default())
-    //    .expect("Failed to start application");
-    //
-    // app.connect_activate(init_gui);
-    //
-    // app.run(&std::env::args().collect::<Vec<_>>());
-    run_sorts();
+    let app = gtk::Application::new(Some("dartt0n.sorts_stats.app"), Default::default())
+       .expect("Failed to start application");
+
+    app.connect_activate(init_gui);
+
+    app.run(&std::env::args().collect::<Vec<_>>());
 }
