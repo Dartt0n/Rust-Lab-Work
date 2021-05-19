@@ -1,48 +1,23 @@
 mod sorts;
 mod typed_files;
+mod gui;
+mod globals;
 
-use crate::sorts::{bubble_sort, limited_bubble_sort, selection_sort, shaker_sort, quick_sort};
 use crate::typed_files::IntegerFile;
 use std::fs::OpenOptions;
 use std::io::Result;
-use std::time::{Duration, Instant};
 
-fn run_with_timer(function: fn(&str) -> Result<()>, target: &str) -> Result<Duration> {
-    let start = Instant::now();
-    function(target)?;
-    Ok(start.elapsed())
-}
+extern crate gtk;
+use gtk::prelude::*;
+use gio::prelude::*;
+use crate::gui::init_gui;
+use crate::globals::SORTS;
 
-struct Sort {
-    name: &'static str,
-    run: fn(&str) -> Result<()>,
-}
 
 fn run_sorts() {
-    let sorts = [
-        Sort {
-            name: "Сортировка пузырьком",
-            run: bubble_sort,        },
-        Sort {
-            name: "Сортировка простым выбором",
-            run: selection_sort,
-        },
-        Sort {
-            name: "Сортировка пузырьком с ограничением",
-            run: limited_bubble_sort,
-        },
-        Sort {
-            name: "Сортировка перемешиванием",
-            run: shaker_sort,
-        },
-        Sort {
-            name: "Быстрая сортировка",
-            run: quick_sort,
-        }
-    ];
     let sizes = [100, 500, 1_000, 5_000, 10_000, 50_000];
 
-    for sort in &sorts {
+    for sort in &SORTS {
         let mut files = Vec::<String>::new();
         for size in &sizes {
             let name = format!("data/d{}.dat", size);
@@ -51,9 +26,8 @@ fn run_sorts() {
             files.push(name);
         }
         for file in files {
-            match run_with_timer(sort.run, &file) {
-                Ok(time) => println!("Сортировка: \"{}\"\n\tФайл: \"{}\"\n\tВремя: {} мс\n", sort.name, file, time.as_millis()),
-
+            match (sort.run)(&file) {
+                Ok(time) => println!("Сортировка: \"{}\"\n\tФайл: \"{}\"\n\tВремя: {} мкс\n", sort.name, file, time.as_micros()),
                 Err(e) => println!("Сортировка: \"{}\" Файл: \"{}\" Ошибка: \"{}\"", sort.name, file, e),
             };
         }
@@ -61,5 +35,11 @@ fn run_sorts() {
 }
 
 fn main() {
+    // let app = gtk::Application::new(Some("dartt0n.sorts_stats.app"), Default::default())
+    //    .expect("Failed to start application");
+    //
+    // app.connect_activate(init_gui);
+    //
+    // app.run(&std::env::args().collect::<Vec<_>>());
     run_sorts();
 }
