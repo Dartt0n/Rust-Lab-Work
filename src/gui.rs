@@ -1,8 +1,7 @@
 extern crate gtk;
-use gtk::prelude::*;
 use crate::globals::SORTS;
 use glib::types::Type;
-
+use gtk::prelude::*;
 
 pub fn init_gui(app: &gtk::Application) {
     let main_window = gtk::ApplicationWindowBuilder::new()
@@ -10,10 +9,7 @@ pub fn init_gui(app: &gtk::Application) {
         .height_request(850)
         .build();
 
-    let field = gtk::FixedBuilder::new()
-        .width_request(1200)
-        .height_request(650)
-        .build();
+    let field = gtk::FixedBuilder::new().width_request(1200).height_request(650).build();
     main_window.add(&field);
 
     let sort_chooser = gtk::ComboBoxTextBuilder::new()
@@ -27,10 +23,7 @@ pub fn init_gui(app: &gtk::Application) {
     sort_chooser.set_active_id(Some("Default"));
     field.put(&sort_chooser, 10, 10);
 
-    let recalculate_button = gtk::ButtonBuilder::new()
-        .width_request(375)
-        .height_request(50)
-        .build();
+    let recalculate_button = gtk::ButtonBuilder::new().width_request(375).height_request(50).build();
     recalculate_button.add(&gtk::Label::new(Some("Пересчитать")));
     field.put(&recalculate_button, 10, 70);
 

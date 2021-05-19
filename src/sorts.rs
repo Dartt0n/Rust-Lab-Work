@@ -1,7 +1,7 @@
 use crate::typed_files::IntegerFile;
 use std::fs::OpenOptions;
 use std::io::Result;
-use std::time::{Instant, Duration};
+use std::time::{Duration, Instant};
 
 pub fn selection_sort(target: &str) -> Result<Duration> {
     let mut file = OpenOptions::new().read(true).open(target)?;
@@ -115,17 +115,22 @@ fn partition(array: &mut Vec<i32>, first: usize, last: usize) -> usize {
         }
         j += 1;
     }
-    if array[last] < array[i] { array.swap(i, last); }
+    if array[last] < array[i] {
+        array.swap(i, last);
+    }
 
     i
 }
 fn quick_sort_rec(array: &mut Vec<i32>, start: usize, end: usize) {
-    if start >= end { return; }
+    if start >= end {
+        return;
+    }
     let pivot = partition(array, start, end);
-    if pivot != 0 { quick_sort_rec(array, start, pivot - 1); }
+    if pivot != 0 {
+        quick_sort_rec(array, start, pivot - 1);
+    }
     quick_sort_rec(array, pivot + 1, end);
 }
-
 
 pub fn quick_sort(target: &str) -> Result<Duration> {
     let mut file = OpenOptions::new().read(true).open(target)?;

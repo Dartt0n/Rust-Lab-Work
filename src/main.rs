@@ -1,18 +1,17 @@
+mod globals;
+mod gui;
 mod sorts;
 mod typed_files;
-mod gui;
-mod globals;
 
 use crate::typed_files::IntegerFile;
 use std::fs::OpenOptions;
 use std::io::Result;
 
 extern crate gtk;
-use gtk::prelude::*;
-use gio::prelude::*;
-use crate::gui::init_gui;
 use crate::globals::SORTS;
-
+use crate::gui::init_gui;
+use gio::prelude::*;
+use gtk::prelude::*;
 
 fn run_sorts() {
     let sizes = [100, 500, 1_000, 5_000, 10_000, 50_000];
@@ -21,13 +20,20 @@ fn run_sorts() {
         let mut files = Vec::<String>::new();
         for size in &sizes {
             let name = format!("data/d{}.dat", size);
-            let mut file = OpenOptions::new().write(true).create(true).truncate(true).open(&name).unwrap();
+            let mut file = OpenOptions::new()
+                .write(true)
+                .create(true)
+                .truncate(true)
+                .open(&name)
+                .unwrap();
             file.fill_shuffled(*size).unwrap();
             files.push(name);
         }
         for size in &sizes {
             match (sort.run)(&format!("data/d{}.dat", size)) {
-                Ok(time) => println!("{} | {} | {}", sort.name, size, time.as_micros()),
+                Ok(time) => {
+                    println!("{} | {} | {}", sort.name, size, time.as_micros())
+                }
                 Err(e) => println!("{}", e),
             };
         }
@@ -35,8 +41,7 @@ fn run_sorts() {
 }
 
 fn main() {
-    let app = gtk::Application::new(Some("dartt0n.sorts_stats.app"), Default::default())
-       .expect("Failed to start application");
+    let app = gtk::Application::new(None, Default::default()).expect("Failed to start application");
 
     app.connect_activate(init_gui);
 
