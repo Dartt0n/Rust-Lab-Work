@@ -3,15 +3,12 @@ mod gui;
 mod sorts;
 mod typed_files;
 
-use crate::typed_files::IntegerFile;
-use std::fs::OpenOptions;
-use std::io::Result;
-
 extern crate gtk;
+use crate::typed_files::IntegerFile;
 use crate::globals::SORTS;
 use crate::gui::init_gui;
+use std::fs::OpenOptions;
 use gio::prelude::*;
-use gtk::prelude::*;
 
 fn run_sorts() {
     let sizes = [100, 500, 1_000, 5_000, 10_000, 50_000];

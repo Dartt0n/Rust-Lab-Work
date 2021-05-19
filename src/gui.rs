@@ -1,6 +1,5 @@
 extern crate gtk;
 use crate::globals::SORTS;
-use glib::types::Type;
 use gtk::prelude::*;
 
 pub fn init_gui(app: &gtk::Application) {

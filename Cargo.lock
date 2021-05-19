@@ -601,7 +601,6 @@ name = "sort_statistics"
 version = "0.1.0"
 dependencies = [
  "gio",
- "glib",
  "gtk",
  "rand",
 ]
