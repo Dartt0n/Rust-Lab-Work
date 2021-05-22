@@ -1,14 +1,11 @@
 mod globals;
-mod gui;
+// mod gui;
 mod sorts;
 mod typed_files;
 
-extern crate gtk;
 use crate::typed_files::IntegerFile;
 use crate::globals::SORTS;
-use crate::gui::init_gui;
 use std::fs::OpenOptions;
-use gio::prelude::*;
 
 fn run_sorts() {
     let sizes = [100, 500, 1_000, 5_000, 10_000, 50_000];
@@ -38,9 +35,5 @@ fn run_sorts() {
 }
 
 fn main() {
-    let app = gtk::Application::new(None, Default::default()).expect("Failed to start application");
-
-    app.connect_activate(init_gui);
-
-    app.run(&std::env::args().collect::<Vec<_>>());
+    run_sorts();
 }
