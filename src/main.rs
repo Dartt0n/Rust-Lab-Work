@@ -1,5 +1,4 @@
 mod globals;
-// mod gui;
 mod sorts;
 mod typed_files;
 
@@ -13,7 +12,7 @@ fn run_sorts() {
     for sort in &SORTS {
         let mut files = Vec::<String>::new();
         for size in &sizes {
-            let name = format!("data/d{}.dat", size);
+            let name = format!("{}_integers.dat", size);
             let mut file = OpenOptions::new()
                 .write(true)
                 .create(true)
@@ -24,7 +23,7 @@ fn run_sorts() {
             files.push(name);
         }
         for size in &sizes {
-            match (sort.run)(&format!("data/d{}.dat", size)) {
+            match (sort.run)(&format!("{}_integers.dat", size)) {
                 Ok(time) => {
                     println!("{} | {} | {}", sort.name, size, time.as_micros())
                 }
