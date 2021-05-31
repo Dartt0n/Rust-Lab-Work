@@ -35,7 +35,12 @@ pub const SORTS: [Sort; 5] = [
 
 pub fn run_sorts() {
     let sizes = [100, 500, 1_000, 5_000, 10_000, 50_000];
-    let mut result_file = OpenOptions::new().write(true).create(true).truncate(true).open("result.csv").unwrap();
+    let mut result_file = OpenOptions::new()
+        .write(true)
+        .create(true)
+        .truncate(true)
+        .open("result.csv")
+        .unwrap();
     for sort in &SORTS {
         let mut files = Vec::<String>::new();
         for size in &sizes {
@@ -52,8 +57,7 @@ pub fn run_sorts() {
         let mut scv_line = String::from(sort.name);
         for size in &sizes {
             match (sort.run)(&format!("{}_integers.dat", size)) {
-                Ok(time) => 
-                    scv_line += &format!(":{}", time.as_micros()),
+                Ok(time) => scv_line += &format!(":{}", time.as_micros()),
                 Err(e) => println!("{}", e),
             };
         }
