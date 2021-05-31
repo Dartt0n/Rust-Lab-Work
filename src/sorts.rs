@@ -1,14 +1,26 @@
+// типизированные файлы
 use crate::typed_files::IntegerFile;
+// оперции над файлами
 use std::fs::OpenOptions;
 use std::io::Result;
+// измерение времени
 use std::time::{Duration, Instant};
 
 pub fn selection_sort(target: &str) -> Result<Duration> {
+    /*
+        Сортировка простым выбором
+    */
+    // открываем файл
     let mut file = OpenOptions::new().read(true).open(target)?;
+    // читаем данные из него в массив
     let mut array = file.read_as_array()?;
+    // получаем количество чисел
     let length = file.get_count()?;
+    // закрываем файл и освобождаем память
     drop(file);
+    // начинаем отсчет времени
     let start = Instant::now();
+    // сортировка простым выбором
     for i in 0..length - 1 {
         let mut min_index = i;
         for j in i + 1..length {
@@ -18,18 +30,30 @@ pub fn selection_sort(target: &str) -> Result<Duration> {
         }
         array.swap(min_index, i);
     }
+    // сохраняем сколько времени прошло
     let answer = start.elapsed();
+    // записываем в тот же файл уже отсортированный массив
     let mut file = OpenOptions::new().truncate(true).write(true).open(target)?;
     file.write_array(array)?;
+    // возвращаем время работы сортировки
     Ok(answer)
 }
 
 pub fn bubble_sort(target: &str) -> Result<Duration> {
+    /*
+        Сортировка пузырьком
+    */
+    // открываем файл
     let mut file = OpenOptions::new().read(true).open(target)?;
+    // читаем данные из него в массив
     let mut array = file.read_as_array()?;
+    // получаем количество чисел
     let length = file.get_count()?;
+    // закрываем файл и освобождаем память
     drop(file);
+    // начинаем отсчет времени
     let start = Instant::now();
+    // сортировка пузырьком
     for i in 0..length {
         for j in 0..length {
             if array[i] < array[j] {
@@ -37,11 +61,16 @@ pub fn bubble_sort(target: &str) -> Result<Duration> {
             }
         }
     }
+    // сохраняем сколько времени прошло
     let answer = start.elapsed();
+    // записываем в тот же файл уже отсортированный массив
     let mut file = OpenOptions::new().truncate(true).write(true).open(target)?;
     file.write_array(array)?;
+    // возвращаем время работы сортировки
     Ok(answer)
 }
+
+// к остальным сортировкам комментарии аналогичны
 
 pub fn limited_bubble_sort(target: &str) -> Result<Duration> {
     let mut file = OpenOptions::new().read(true).open(target)?;
